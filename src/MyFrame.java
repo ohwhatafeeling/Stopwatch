@@ -86,6 +86,7 @@ public class MyFrame extends JFrame implements ActionListener {
 		if (e.getSource() == reset) {
 			started = false;
 			startStop.setText("Start");
+			stop();
 			reset();
 		}
 	}
