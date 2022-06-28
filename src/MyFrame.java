@@ -1,6 +1,4 @@
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,18 +6,42 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.Timer;
 
 public class MyFrame extends JFrame implements ActionListener {
 	JLabel time;
 	JButton startStop;
 	JButton reset;
+	int elapsedTime = 0;
+	int seconds = 0;
+	int minutes = 0;
+	int hours = 0;
+	boolean started = false;
+	String secondsString = String.format("%02d", seconds);
+	String minutesString = String.format("%02d", minutes);
+	String hoursString = String.format("%02d", hours);
+	Timer timer = new Timer(1000, new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			elapsedTime += 1000;
+			hours = (elapsedTime / 3600000);
+			minutes = (elapsedTime / 60000) % 60;
+			seconds = (elapsedTime / 1000) % 60;
+			hoursString = String.format("%02d", hours);
+			minutesString = String.format("%02d", minutes);
+			secondsString = String.format("%02d", seconds);
+			time.setText(hoursString + ":" + minutesString + ":" + secondsString);
+		}
+		
+	});
 	
 	MyFrame() {
 		time = new JLabel();
 		time.setBounds(25, 25, 250, 50);
 		time.setBackground(Color.BLACK);
 		time.setOpaque(true);
-		time.setText("00:00.000");
+		time.setText(hoursString + ":" + minutesString + ":" + secondsString);
 		time.setFont(new Font(null, Font.BOLD, 45));
 		time.setForeground(Color.GREEN);
 		time.setHorizontalAlignment(JLabel.CENTER);
@@ -27,10 +49,12 @@ public class MyFrame extends JFrame implements ActionListener {
 		reset = new JButton();
 		reset.setBounds(40, 90, 100, 50);
 		reset.setText("Reset");
+		reset.addActionListener(this);
 		
 		startStop = new JButton();
 		startStop.setBounds(160, 90, 100, 50);
 		startStop.setText("Start");
+		startStop.addActionListener(this);
 	
 		this.setTitle("Mick's Stopwatch");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,8 +72,41 @@ public class MyFrame extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+		if (e.getSource() == startStop) {
+			if (started == false) {
+				started = true;
+				startStop.setText("Stop");
+				start();
+			} else {
+				started = false;
+				startStop.setText("Start");
+				stop();
+			}
+		}
+		if (e.getSource() == reset) {
+			started = false;
+			startStop.setText("Start");
+			reset();
+		}
+	}
+	
+	public void start() {
+		timer.start();
+	}
+	
+	public void stop() {
+		timer.stop();
+	}
+	
+	public void reset() {
+		elapsedTime = 0;
+		hours = 0;
+		minutes = 0;
+		seconds = 0;
+		hoursString = String.format("%02d", hours);
+		minutesString = String.format("%02d", minutes);
+		secondsString = String.format("%02d", seconds);
+		time.setText(hoursString + ":" + minutesString + ":" + secondsString);
 	}
 	
 }
