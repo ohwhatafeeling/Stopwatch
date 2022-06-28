@@ -13,25 +13,29 @@ public class MyFrame extends JFrame implements ActionListener {
 	JButton startStop;
 	JButton reset;
 	int elapsedTime = 0;
+	int milliseconds = 0;
 	int seconds = 0;
 	int minutes = 0;
 	int hours = 0;
 	boolean started = false;
-	String secondsString = String.format("%02d", seconds);
-	String minutesString = String.format("%02d", minutes);
 	String hoursString = String.format("%02d", hours);
-	Timer timer = new Timer(1000, new ActionListener() {
+	String minutesString = String.format("%02d", minutes);
+	String secondsString = String.format("%02d", seconds);
+	String millisecondsString = String.format("%03d", milliseconds);
+	Timer timer = new Timer(1, new ActionListener() {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			elapsedTime += 1000;
+			elapsedTime ++;
 			hours = (elapsedTime / 3600000);
 			minutes = (elapsedTime / 60000) % 60;
 			seconds = (elapsedTime / 1000) % 60;
+			milliseconds = (elapsedTime % 1000);
 			hoursString = String.format("%02d", hours);
 			minutesString = String.format("%02d", minutes);
 			secondsString = String.format("%02d", seconds);
-			time.setText(hoursString + ":" + minutesString + ":" + secondsString);
+			millisecondsString = String.format("%03d", milliseconds);
+			time.setText(hoursString + ":" + minutesString + ":" + secondsString + "." + millisecondsString);
 		}
 		
 	});
@@ -41,8 +45,8 @@ public class MyFrame extends JFrame implements ActionListener {
 		time.setBounds(25, 25, 250, 50);
 		time.setBackground(Color.BLACK);
 		time.setOpaque(true);
-		time.setText(hoursString + ":" + minutesString + ":" + secondsString);
-		time.setFont(new Font(null, Font.BOLD, 45));
+		time.setText(hoursString + ":" + minutesString + ":" + secondsString + "." + millisecondsString);
+		time.setFont(new Font(null, Font.BOLD, 30));
 		time.setForeground(Color.GREEN);
 		time.setHorizontalAlignment(JLabel.CENTER);
 
@@ -104,10 +108,12 @@ public class MyFrame extends JFrame implements ActionListener {
 		hours = 0;
 		minutes = 0;
 		seconds = 0;
+		milliseconds = 0;
 		hoursString = String.format("%02d", hours);
 		minutesString = String.format("%02d", minutes);
 		secondsString = String.format("%02d", seconds);
-		time.setText(hoursString + ":" + minutesString + ":" + secondsString);
+		millisecondsString = String.format("%03d", milliseconds);
+		time.setText(hoursString + ":" + minutesString + ":" + secondsString + "." + millisecondsString);
 	}
 	
 }
